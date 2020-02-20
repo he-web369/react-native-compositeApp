@@ -1,114 +1,79 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React, { Component } from 'react'
+import { Text, View,StyleSheet,Dimensions } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
+import {Provider} from 'react-redux'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import store from './src/redux/store'
+import Message from './src/pages/Message/Message'
+import Addfriend from './src/pages/Addfriend/Addfriend'
+import Play from './src/pages/Play/Play'
+import Profile from './src/pages/Profile/Profile'
+import Home from './src/pages/Fun/Home'
+import Com from './src/pages/Fun/Community'
+import Mov from './src/pages/Fun/Movies'
+import Nav from './src/Components/Nav'
+import RNCameraApp from './src/Components/RNCamera'
+import Sign from './src/Components/Sign'
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const Tab=createBottomTabNavigator()
+const {Navigator,Screen}=Tab
+const ScreenHeight=Math.round(Dimensions.get('window').height)
 
-const App: () => React$Node = () => {
+export default class App extends Component {
+  
+  render() {
+    return (
+      <Provider store={store}>
+        <NavigationContainer  >
+          <Navigator initialRouteName='fun'
+            tabBarOptions={{
+              tabStyle :{justifyContent:'center'},
+                style:{height:ScreenHeight*0.07},
+                activeBackgroundColor:'orange',
+                activeTintColor:'black',
+                labelStyle:{fontSize:16,fontWeight:'bold'}
+              }
+            }
+          >
+            <Screen name='fun' component={FunTab}  
+            options={{title:'娱乐'}}
+            ></Screen>
+            <Screen name='play' 
+            component={Play}  options={{title:'播放'}}></Screen>
+            <Screen name='addFri' 
+            component={Addfriend}  options={{title:'添加'}}></Screen>
+            <Screen name='msg' 
+            component={Message}  options={{title:'信息'}}></Screen>
+            <Screen name='profile' 
+            component={Profile}  options={{title:'个人'}}></Screen>
+            <Screen name='rncamera' options={{
+               tabBarButton:()=>null
+              }
+            } component={RNCameraApp}/>
+            <Screen name='sign' options={{
+               tabBarButton:()=>null
+              }
+            } component={Sign}/>
+          </Navigator>
+        </NavigationContainer>
+      </Provider>
+    )
+  }
+}
+const TopTab=createMaterialTopTabNavigator()
+
+function FunTab(){
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
-
-export default App;
+    <TopTab.Navigator 
+    initialRouteName='home'
+    tabBar={(props)=>(<Nav {...props}/>)}
+    >
+        <TopTab.Screen name='community' component={Com}/>
+        <TopTab.Screen name='home' component={Home}/>
+        <TopTab.Screen name='movies' component={Mov}/>
+        
+    </TopTab.Navigator>
+  )
+}
