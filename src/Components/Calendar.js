@@ -82,7 +82,7 @@ import  {
               };
             }
             days.push(
-              <TouchableHighlight style={[styles.flex_1]} underlayColor="#fff" onPress={this.props.touchEvent?this.props.touchEvent.bind(this, dateStr):null}>
+              <TouchableHighlight key={Math.random()*2000} style={[styles.flex_1]} underlayColor="#fff" onPress={this.props.touchEvent?this.props.touchEvent.bind(this, dateStr):null}>
                 <View style={bk}>
                   <Text style={grayStyle}>{dayNum}</Text>
                 </View>
@@ -90,7 +90,7 @@ import  {
             );
           }else{
             days.push(
-              <View style={[styles.flex_1]}>
+              <View style={[styles.flex_1]} key={Math.random()*2000}>
                 <Text></Text>
               </View>
             );
@@ -98,11 +98,11 @@ import  {
 
         }
         rows.push(
-          <View style={styles.row}>{days}</View>
+          <View style={styles.row} key={Math.random()*2000}>{days}</View>
         );
       }
       items.push(
-        <View style={[styles.cm_bottom]}>
+        <View style={[styles.cm_bottom]} key={Math.random()*1000}>
           <View style={styles.month}>
             <Text style={styles.month_text}>{newDate.getFullYear()}年{newDate.getMonth() + 1}月</Text>
           </View>
@@ -149,10 +149,6 @@ import  {
 };
 
 let styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor:'orange'
-  },
   flex_1:{
     flex:1,
     alignItems:'center',
@@ -160,6 +156,7 @@ let styles = StyleSheet.create({
   },
   calendar_container:{
     backgroundColor:'#fff',
+    height:400,
     flex:1,
     borderTopWidth:1/PixelRatio.get(),
     borderBottomWidth:1/PixelRatio.get(),

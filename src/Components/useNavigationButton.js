@@ -1,17 +1,20 @@
 import * as React from 'react';
-import { Button } from 'react-native';
+import { Text,TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 class MyBackButton extends React.Component {
     render() {
       // Get it from props
       const { navigation } = this.props
-      return <Button 
-      title='回  退'
-      color='orange'
+      return <TouchableOpacity
+      style={{width:'100%',height:50,justifyContent:'center',backgroundColor:'orange'}}
       onPress={() => {
-        navigation.goBack();
-      }}/>
+        navigation.goBack()
+      }}
+      >
+        <Text 
+        style={{fontFamily:'iconfont',fontSize:30,color:"white",marginLeft:"90%"}}>&#xe65f;</Text>
+      </TouchableOpacity>
     }
   }
   

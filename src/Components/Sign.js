@@ -10,7 +10,7 @@ export default class Sign extends Component{
     }
     render(){
        return  (
-            <View style={{flex:1,backgroundColor:'orange'}}>
+            <View style={{backgroundColor:'orange',height:"50%"}}>
                 <Calendar
                     headerStyle={style.headerStyle}
                     touchEvent={this.handlePress}

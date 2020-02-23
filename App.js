@@ -7,7 +7,6 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 
 import store from './src/redux/store'
 import Message from './src/pages/Message/Message'
-import Addfriend from './src/pages/Addfriend/Addfriend'
 import Play from './src/pages/Play/Play'
 import Profile from './src/pages/Profile/Profile'
 import Home from './src/pages/Fun/Home'
@@ -16,6 +15,7 @@ import Mov from './src/pages/Fun/Movies'
 import Nav from './src/Components/Nav'
 import RNCameraApp from './src/Components/RNCamera'
 import Sign from './src/Components/Sign'
+import Search from './src/pages/Search/Search'
 
 const Tab=createBottomTabNavigator()
 const {Navigator,Screen}=Tab
@@ -29,25 +29,33 @@ export default class App extends Component {
         <NavigationContainer  >
           <Navigator initialRouteName='fun'
             tabBarOptions={{
-              tabStyle :{justifyContent:'center'},
-                style:{height:ScreenHeight*0.07},
+                style:{height:ScreenHeight*0.09},
                 activeBackgroundColor:'orange',
                 activeTintColor:'black',
-                labelStyle:{fontSize:16,fontWeight:'bold'}
               }
             }
           >
             <Screen name='fun' component={FunTab}  
-            options={{title:'娱乐'}}
+            options={{title:'娱乐',
+            tabBarIcon:()=>(<Text style={style.iconStyle}>&#xe641;</Text>)
+          }}
             ></Screen>
             <Screen name='play' 
-            component={Play}  options={{title:'播放'}}></Screen>
-            <Screen name='addFri' 
-            component={Addfriend}  options={{title:'添加'}}></Screen>
+            component={Play}  options={{title:'播放',
+            tabBarIcon:()=>(<Text style={style.iconStyle}>&#xe62e;</Text>)
+            }}></Screen>
+            <Screen name='search' 
+            component={Search}  options={{title:'搜索',
+            tabBarIcon:()=>(<Text style={style.iconStyle}>&#xe65a;</Text>)
+            }}></Screen>
             <Screen name='msg' 
-            component={Message}  options={{title:'信息'}}></Screen>
+            component={Message}  options={{title:'信息',
+            tabBarIcon:()=>(<Text style={style.iconStyle}>&#xe69d;</Text>)
+            }}></Screen>
             <Screen name='profile' 
-            component={Profile}  options={{title:'个人'}}></Screen>
+            component={Profile}  options={{title:'个人',
+            tabBarIcon:()=>(<Text style={style.iconStyle}>&#xe60a;</Text>)
+            }}></Screen>
             <Screen name='rncamera' options={{
                tabBarButton:()=>null
               }
@@ -73,7 +81,13 @@ function FunTab(){
         <TopTab.Screen name='community' component={Com}/>
         <TopTab.Screen name='home' component={Home}/>
         <TopTab.Screen name='movies' component={Mov}/>
-        
     </TopTab.Navigator>
   )
 }
+const style=StyleSheet.create({
+  iconStyle:{
+    fontFamily:'iconfont',
+    fontSize:22
+
+  }
+})

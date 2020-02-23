@@ -3,7 +3,7 @@
  */
 
 import React,{Component} from 'react'
-import { Text, View,StyleSheet,TextInput,Dimensions } from 'react-native'
+import { TouchableOpacity,Text, View,StyleSheet,TextInput,Dimensions } from 'react-native'
 import {createStackNavigator} from '@react-navigation/stack'
 
 const ScreenHeight=Math.round(Dimensions.get('window').height)
@@ -25,7 +25,12 @@ export default class Nav extends Component{
                     onPress={()=>this.props.navigation.navigate('sign')} 
                     style={style.qrStyle}>&#xe635;</Text>
                 </View>
-               <TextInput style={style.searchStyle} placeholder="请输入搜索内容"/>
+                <View style={style.inputContainer}>
+                    <TextInput  style={style.searchStyle} placeholder="请输入搜索内容"/>
+                    <TouchableOpacity style={style.buttonStyle}>
+                        <Text style={{fontFamily:'iconfont',fontSize:25}}>&#xe65a;</Text>
+                    </TouchableOpacity>
+                </View>
             </View>)
     }
     handleNavigate=(str)=>{
@@ -46,14 +51,19 @@ const style=StyleSheet.create({
         alignItems:'center',
         zIndex:5
     },
-    searchStyle:{
-        height:'60%',
+    inputContainer:{
+        height:'50%',
         width:'80%',
         backgroundColor:'white',
-        borderRadius:20,
+        borderRadius:30,
         position:'absolute',
-        bottom:'-30%',
-        textAlign:'center'
+        bottom:'-25%',
+    },
+    searchStyle:{
+        height:'100%',
+        width:'60%',
+        textAlign:'center',
+        alignSelf:'center'
     },
     topStyle:{
         height:'50%',
@@ -70,5 +80,16 @@ const style=StyleSheet.create({
     decorationStyle:{
         textDecorationLine:'underline',
         fontSize:20,
+    },
+    buttonStyle:{
+        width:60,
+        height:"80%",
+        borderRadius:5,
+        backgroundColor:'orange',
+        justifyContent:'center',
+        alignItems:'center',
+        position:'absolute',
+        top:'10%',
+        left:'80%'
     }
 })
