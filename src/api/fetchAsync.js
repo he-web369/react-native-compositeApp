@@ -7,7 +7,6 @@
 export default function fetchAsync(url,params={},method='GET'){
     return new Promise((resolve,reject)=>{
         method=method.toUpperCase()
-        let result=null
         try {
             if(method==='GET'||method==="DELETE"){
                 let keys=Object.keys(params)
@@ -20,8 +19,7 @@ export default function fetchAsync(url,params={},method='GET'){
                 }
                 fetch(url).then(res=>{
                     res.json().then(res=>{
-                        result=res
-                        resolve(result)
+                        resolve(res)
                     })
                 })
             }else{
@@ -34,8 +32,7 @@ export default function fetchAsync(url,params={},method='GET'){
                     body: JSON.stringify(params)
                 }).then(res=>{
                     res.json().then(res=>{
-                        result=res
-                        resolve(result)
+                        resolve(res)
                     })
                 })
             }

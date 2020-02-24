@@ -1,12 +1,17 @@
 import React, { Component,PureComponent } from 'react'
-import {SectionList,Animated,Dimensions, ScrollView,Text, View,StyleSheet,TouchableOpacity,ProgressBarAndroid  } from 'react-native'
+import {FlatList,Animated,Dimensions, ScrollView,Text, View,StyleSheet,TouchableOpacity,ProgressBarAndroid  } from 'react-native'
 import Video from 'react-native-video'
 import {captureRef} from 'react-native-view-shot'
+import {Icon,Input,Avatar ,Overlay,Button,Image,Divider ,ButtonGroup } from 'react-native-elements'
+import {connect} from 'react-redux'
 
+import {getCommentsAsync} from '../../redux/actions'
+import Comment from '../../Components/Comment'
 import MyBackButton from '../../Components/useNavigationButton'
 import { Easing } from 'react-native-reanimated'
 const ScreenWidth=Math.round(Dimensions.get('window').width)
-export default class Play extends PureComponent{
+
+class Play extends PureComponent{
 
     constructor(props){
         super(props)
@@ -23,8 +28,16 @@ export default class Play extends PureComponent{
             volume:0.5,
             showVolumeBtn:false,
             fadeAnim:new Animated.Value(0),
-            changeSpeed:false
+            changeSpeed:false,
+            overLay:false,
+            imageUri:'',
+            buttonIndex:1
         }
+    }
+    componentDidMount(){
+        // if(this.props.route.params){
+        //     this.props.getCommentsAsync(this.props.route.params.movie.title)
+        // }
     }
     outSty=() => {
         Animated.timing(                  
@@ -167,18 +180,26 @@ export default class Play extends PureComponent{
             format:'jpg',
             quality:0.8,
         }).then(uri=>{
+            this.setState({overLay:true,imageUri:uri})
         })
         .catch(err=>console.log(err))
+    }
+    updateButtonIndex=(selectedIndex)=>{
+        this.setState({buttonIndex:selectedIndex})
     }
     render(){
         let movie=null
         if(!this.props.route.params){
-            movie={}
+            movie={directors:[],rating:{},durations:[]}
         }else{
             movie=this.props.route.params.movie||{}
         }
-        let {changeSpeed,volume,paused,loading,full,currentTime,totalTime,progress,bufferProgress,rate,repeat}=this.state
+        let {imageUri,overLay,changeSpeed,volume,paused,
+            loading,buttonIndex,
+            full,currentTime,totalTime,progress,
+            bufferProgress,rate,repeat}=this.state
         let otherStyle=StyleSheet.create({other:{left:60*volume-5}})
+        const comments=this.props.comments
        return  (
             <ScrollView >
                 <MyBackButton/>
@@ -192,12 +213,13 @@ export default class Play extends PureComponent{
                     repeat={repeat}
                     fullscreen={full}
                     resizeMode="stretch"
-                    source={{uri:''}}
+                    source={{uri:'https://you-ku.qingyu-zuida.com/20191223/2088_83931ef9/index.m3u8'}}
                     style={styles.videoStyle}
                     onLoadStart={()=>this.setState({loading:true})}
                     onLoad={(e)=>this.handleLoad(e)}
                     onProgress={(e)=>this.handleProgress(e)}
                     onSeek={(e)=>e.seekTime+4}
+                    minLoadRetryCount={5}
                     />
                 <View  style={{backgroundColor:'black',width:'100%',flexDirection:'row'}}>
                     <View style={{width:'70%',position:'relative',justifyContent:'center',alignItems:'center'}}>
@@ -288,12 +310,100 @@ export default class Play extends PureComponent{
                     ref={(f)=>this.volRef=f} 
                     style={[styles.volumeBtnStyle,otherStyle.other]}/>
                 </Animated.View >
-                <Text>{movie.title||'none'}</Text>
+                <Overlay
+                    borderRadius={10}
+                    isVisible={overLay}
+                    windowBackgroundColor="rgba(0, 0, 0, .6)"
+                    width={ScreenWidth-140}
+                    height={370}
+                    overlayBackgroundColor="rgba(255, 165, 0, .8)"
+                    onBackdropPress={() => this.setState({ overLay: false })}
+                    >
+                    <View style={{flex:1,justifyContent:'space-evenly'}}>
+                        <Image source={{uri:imageUri||''}} ref={f=>this.imageRef=f} style={{ width:ScreenWidth-160, height: 240 }}/>
+                        <Button title='返回' buttonStyle={{backgroundColor:'gray'}}  onPress={() => this.setState({ overLay: false })}/>
+                        <Button title='保存到本地' buttonStyle={{backgroundColor:'gray'}} />
+                    </View>
+                </Overlay>
+                <Divider />
+                <ButtonGroup 
+                    selectedButtonStyle={{backgroundColor:'orange'}}
+                    buttons={['简介','评论']}
+                    onPress={this.updateButtonIndex}
+                    containerStyle={{height: 40}}
+                    selectedIndex={buttonIndex}/>
+                <Divider />
+                {!buttonIndex?(
+                    <View>
+                    <Text style={styles.normalText}>电影名称：{movie.title||"无"}</Text>
+                    <Divider />
+                    <View style={{flexDirection:'row',alignItems:'center'}}>
+                        <Text style={styles.normalText}>导演：</Text>
+                        {movie.title?(
+                            <View style={{alignItems:'center',justifyContent:'center',height:60}}>
+                                <Avatar 
+                                activeOpacity={0.7}
+                                rounded 
+                                containerStyle={{marginTop:5}}
+                                size="small" 
+                                source={{uri:movie.directors[0].avatars.small}} />
+                                <Text style={{...styles.normalText,fontSize:12}}>{movie.directors[0].name}</Text>
+                            </View>
+                        ):(<Text style={styles.normalText}>无</Text>)}
+                    </View>
+                    <Divider />
+                    <View style={{flexDirection:'row',alignItems:'center'}}>
+                        <Text style={styles.normalText}>主演：</Text>
+                        {movie.title?(movie.casts.map((item,index)=>(
+                            <View key={index} style={{alignItems:'center',justifyContent:'center',height:60}}>
+                                <Avatar 
+                                activeOpacity={0.7}
+                                rounded 
+                                containerStyle={{marginTop:5}}
+                                size="small" 
+                                source={{uri:item.avatars.small}} />
+                                <Text style={{...styles.normalText,fontSize:12}}>{item.name}</Text>
+                            </View>
+                        ))):(<Text style={styles.normalText}>无</Text>)}
+                    </View>
+                    <Divider />
+                    <Text style={styles.normalText}>上映时间：{movie.year||"无"}</Text>
+                    <Divider />
+                    <Text style={styles.normalText}>评分：{movie.rating.average||"无"}</Text>
+                    <Divider />
+                    <Text style={styles.normalText}>标签：{movie.title?movie.genres.map(item=>(item+" ")):'无'}</Text>
+                </View>
+                    ):(
+                        <View>
+                            <Input 
+                            labelStyle={{color:'black',fontSize:15,margin:10,padding:5,backgroundColor:'orange'}}
+                            labe
+                            label="添加评论" 
+                            placeholder="点击此处评论..."
+                            leftIcon={<Icon  size={24} name="comment" color='rgba(255, 165, 0, 0.7)'/>}
+                            rightIcon={<Icon size={20} name="add" color='rgba(255, 165, 0, 0.7)' reverse/>}
+                            />
+                            <Text style={{fontSize:15,margin:10,padding:5,backgroundColor:'orange',fontWeight:'bold'}}>评论列表</Text>
+                            <Divider/>
+                            {comments.map((comment,index)=>(
+                                <Comment key={index} comment={comment} index={index}/>
+                            ))}
+                        </View>
+                    )}
             </ScrollView>
         )
     }
 }
+export default connect(
+    state=>({comments:state.movieComments}),
+    {getCommentsAsync}
+)(Play)
 const styles=StyleSheet.create({
+    normalText:{
+        marginLeft:10,
+        fontSize:15,
+        lineHeight:25
+    },  
     speedStyle1:{
         justifyContent:'center', 
         alignItems:'center',
@@ -334,7 +444,7 @@ const styles=StyleSheet.create({
         height:ScreenWidth*0.12,
         position:'absolute',
         transform:[{rotateZ:'-90deg'}],
-        bottom:72,
+        top:ScreenWidth*0.715,
         left:'71.25%'
     },
     relativeStyle:{
@@ -346,7 +456,7 @@ const styles=StyleSheet.create({
     },
     loadingStyle:{
         position:'absolute',
-        top:"40%",
+        top:ScreenWidth*0.4,
         left:'45%'
     },
     videoStyle:{
@@ -379,7 +489,7 @@ const styles=StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         position:'absolute',
-        top:'60%',
+        top:ScreenWidth*0.6,
         left:'80%',
         opacity:0.8
     },

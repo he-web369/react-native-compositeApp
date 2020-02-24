@@ -1,63 +1,81 @@
 import React, { PureComponent } from 'react'
 import {ScrollView,RefreshControl, Text, View,StyleSheet,Dimensions, Image,TouchableOpacity  } from 'react-native'
 import Swiper from 'react-native-swiper'
+import {Button,Divider} from 'react-native-elements'
+import {getMoviesDataApi} from '../../api/index'
 import {connect} from 'react-redux'
+import {getMovies,resetMov,toggleRe} from '../../redux/actions'
 
-import {getMoviesDataAsync} from '../../redux/actions'
 import MoviesDetail from './MoviesDetail'
 
 const ScreenHeight=Math.round(Dimensions.get('window').height)
 class Mov extends PureComponent{
     constructor(props){
         super(props)
-        this.refresh=React.createRef()
-        this.props.getMoviesDataAsync(1,10)
         this.state={
-            start:11
+            start:0
         }
+    }
+    componentDidMount(){
+        getMoviesDataApi(0,10).then(res=>{
+            this.props.getMovies(res.subjects)
+            this.setState({
+                start:this.state.start+10,
+            })
+            this.props.toggleRe(false)
+        })
+    }
+    reset=()=>{
+        this.setState({
+            start:0
+        })
+        this.props.toggleRe(true)
+        getMoviesDataApi(0,10).then(res=>{
+            this.props.resetMov(res.subjects)
+            this.setState({
+                start:this.state.start+10,
+            })
+            this.props.toggleRe(false)
+        })
     }
     handleFresh=()=>{
         if(this.state.start<=240){
-            this.refresh.current.refreshing=true
-            this.props.getMoviesDataAsync(this.state.start,10)
-            this.setState({
-                start:this.state.start+10
+            this.props.toggleRe(true)
+            getMoviesDataApi(this.state.start,10).then(res=>{
+                this.props.getMovies(res.subjects)
+                this.setState({
+                    start:this.state.start+10,
+                })
+                this.props.toggleRe(false)
             })
         }
     }
     handlePress=(movie)=>{
         this.props.navigation.navigate('play',{movie})
     }
-    pressRe=()=>{
-        if(this.state.start<=240){
-            this.props.getMoviesDataAsync(this.state.start,10)
-            this.setState({
-                start:this.state.start+10
-            })
-        }
-    }
+    
     render(){
-        const movies=this.props.movies||[]
-        let {start}=this.state
-        const isRefresh=this.props.movies.isRefresh||false
+        const {start}=this.state
+        const {movies,isrefresh}=this.props
        return  (
             <ScrollView 
                     keyboardDismissMode="on-drag"
                     refreshControl={
                         <RefreshControl
-                        ref={this.refresh}
-                        refreshing={isRefresh}
+                        refreshing={isrefresh}
                         onRefresh={this.handleFresh}
                         colors={['orange']}
                     />
                 }
                 style={{marginTop:ScreenHeight*0.03,flex:1}}>
                     <View  style={styles.swiperContainerStyle}>
+                        {movies.length>5?
+                        (
                         <Swiper 
                         onIndexChanged={(index)=>this.index=index}
                         onTouchEnd={()=>this.handlePress(movies[this.index])}
-                        autoplay
                         activeDotColor="orange"
+                        autoplay={true}
                         >
                             {movies.slice(0,5).map((movie,index)=>(
                                 <View key={index} >
@@ -68,29 +86,31 @@ class Mov extends PureComponent{
                                 </View>
                             ))}
                         </Swiper>
+                        ):(<Text></Text>)}
                     </View>
-                    <View style={styles.lineStyle}></View>
-                    <Text style={{fontSize:20,marginLeft:20}}>电影TOP250</Text>
-                    <View style={styles.lineStyle}></View>
+                    <Divider/>
+                    <Button onPress={this.reset} containerStyle={{margin:10,alignItems:'flex-start'}} buttonStyle={{backgroundColor:'orange'}} title="电影TOP250"/>
+                    <Divider/>
                     <View style={{flexWrap:'wrap',flexDirection:'row'}}>
-                        {
+                        {movies.length?
                             movies.map((movie,index)=>(
                                 <TouchableOpacity onPress={()=>this.handlePress(movie)} key={index} style={index%2===1?[styles.touchableOpacityStyleEven,styles.borderStyles]:[styles.touchableOpacityStyleOdd,styles.borderStyles]} >
                                     <MoviesDetail movie={movie}/>
                                 </TouchableOpacity>
-                            ))
+                            )):<Text></Text>
                         }
                     </View>
-                    <TouchableOpacity style={styles.continueLoadStyle} onPress={this.pressRe}
+                    <TouchableOpacity style={styles.continueLoadStyle} onPress={this.handleFresh}
                     ><Text style={{fontSize:12}}>{start<=240?"继续加载":"已到最后"}</Text>
                     </TouchableOpacity>
             </ScrollView>
         )
     }
 }
+
 export default connect(
-    state=>({movies:state.movies}),
-    {getMoviesDataAsync}
+    state=>({movies:state.movies,isrefresh:state.refresh}),
+    {getMovies,resetMov,toggleRe}
 )(Mov)
 const styles=StyleSheet.create({
     lineStyle:{

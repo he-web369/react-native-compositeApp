@@ -5,12 +5,68 @@
 import React,{Component} from 'react'
 import { TouchableOpacity,Text, View,StyleSheet,TextInput,Dimensions } from 'react-native'
 import {createStackNavigator} from '@react-navigation/stack'
+import {connect} from 'react-redux'
+
+import {getMoviesDataApi} from '../api/index'
+import {toggleRe,resetMov} from '../redux/actions'
 
 const ScreenHeight=Math.round(Dimensions.get('window').height)
-export default class Nav extends Component{
+class Nav extends Component{
 
+    state={
+        inputVal:''
+    }
+    handleIn=(text)=>{
+        this.setState({inputVal:text})
+    }
+    subMit= async (index)=>{
+        this.props.toggleRe(true)
+        const name=this.state.inputVal
+        if(index===2&&this.state.inputVal!==''){
+            let data=[]
+            for (let index = 0; index < 300; index+=100) {
+                const result =await getMoviesDataApi(index,250)
+                result.subjects.forEach(item=>{
+                    if(item.title.includes(name)||name.includes(item.title)){
+                        data.push(item)
+                        return
+                    }
+                    item.casts.forEach(actor=>{
+                        if(actor.name.includes(name)||name.includes(actor.name)){
+                            data.push(item)
+                            return 
+                        }
+                    })
+                    if(item.directors[0].name.includes(name)||name.includes(item.directors[0].name)){
+                        data.push(item)
+                        return 
+                    }
+                    item.genres.forEach(gen=>{
+                        if(gen.includes(name)||name.includes(gen)){
+                            data.push(item)
+                            return 
+                        }
+                    })
+                    if(item.year===name){
+                        data.push(item)
+                        return 
+                    }
+                    if(typeof (name*1)==='number'){
+                        if(item.rating.average>new Number(name)){
+                            data.push(item)
+                            return 
+                        }
+                    }
+                })
+            }
+            this.props.resetMov(data)
+            this.props.toggleRe(false)
+        }
+        this.setState({inputVal:''})
+    }
     render(){
         let {index}=this.props.navigationState
+        const {isRefresh}=this.props
         return (<View style={style.totalStyle}>
                 <View style={style.topStyle}>
                     <Text onPress={this.handlePress} style={style.qrStyle}>&#xe636;</Text>
@@ -26,9 +82,11 @@ export default class Nav extends Component{
                     style={style.qrStyle}>&#xe635;</Text>
                 </View>
                 <View style={style.inputContainer}>
-                    <TextInput  style={style.searchStyle} placeholder="请输入搜索内容"/>
-                    <TouchableOpacity style={style.buttonStyle}>
-                        <Text style={{fontFamily:'iconfont',fontSize:25}}>&#xe65a;</Text>
+                    <TextInput value={this.state.inputVal} onChangeText={this.handleIn} style={style.searchStyle} placeholder="请输入搜索内容"/>
+                    <TouchableOpacity onPress={()=>this.subMit(index)} style={style.buttonStyle}>
+                        {isRefresh?<Text style={{fontSize:12}}>链接中</Text>:
+                            <Text style={{fontFamily:'iconfont',fontSize:25}}>&#xe65a;</Text>
+                        }
                     </TouchableOpacity>
                 </View>
             </View>)
@@ -40,7 +98,10 @@ export default class Nav extends Component{
         this.props.navigation.navigate('rncamera')
     }
 }
- 
+export default connect(
+    state=>({isRefresh:state.refresh}),
+    {resetMov,toggleRe}
+)(Nav)
 const style=StyleSheet.create({
     totalStyle:{
         width:'100%',
