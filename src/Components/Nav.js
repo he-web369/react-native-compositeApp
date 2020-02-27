@@ -7,8 +7,8 @@ import { TouchableOpacity,Text, View,StyleSheet,TextInput,Dimensions } from 'rea
 import {createStackNavigator} from '@react-navigation/stack'
 import {connect} from 'react-redux'
 
-import {getMoviesDataApi} from '../api/index'
-import {toggleRe,resetMov} from '../redux/actions'
+import {getMoviesDataApi,getAddress} from '../api/index'
+import {toggleRe,resetMov,searchLocations} from '../redux/actions'
 
 const ScreenHeight=Math.round(Dimensions.get('window').height)
 class Nav extends Component{
@@ -22,7 +22,12 @@ class Nav extends Component{
     subMit= async (index)=>{
         this.props.toggleRe(true)
         const name=this.state.inputVal
-        if(index===2&&this.state.inputVal!==''){
+        if(name===''){
+            this.props.toggleRe(false)
+            return
+        }
+        this.setState({inputVal:''})
+        if(index===2){
             let data=[]
             for (let index = 0; index < 300; index+=100) {
                 const result =await getMoviesDataApi(index,250)
@@ -61,8 +66,20 @@ class Nav extends Component{
             }
             this.props.resetMov(data)
             this.props.toggleRe(false)
+            return 
         }
-        this.setState({inputVal:''})
+        if(index===1){
+            const newLocation=Object.values(this.props.location).reduce((str,item)=>{
+                str+=item+','
+                return str
+            },'').replace(/,$/,'')
+           const addRes=await getAddress(name,newLocation)
+           addRes.pois.forEach(item=>{
+               item.location=item.location.split(',')
+           })
+           this.props.searchLocations(addRes.pois)
+           this.props.toggleRe(false)
+        }
     }
     render(){
         let {index}=this.props.navigationState
@@ -99,8 +116,8 @@ class Nav extends Component{
     }
 }
 export default connect(
-    state=>({isRefresh:state.refresh}),
-    {resetMov,toggleRe}
+    state=>({location:state.location,isRefresh:state.refresh}),
+    {resetMov,toggleRe,searchLocations}
 )(Nav)
 const style=StyleSheet.create({
     totalStyle:{
@@ -113,12 +130,15 @@ const style=StyleSheet.create({
         zIndex:5
     },
     inputContainer:{
-        height:'50%',
+        height:50,
         width:'80%',
         backgroundColor:'white',
         borderRadius:30,
         position:'absolute',
-        bottom:'-25%',
+        bottom:-25,
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'center'
     },
     searchStyle:{
         height:'100%',
@@ -149,8 +169,6 @@ const style=StyleSheet.create({
         backgroundColor:'orange',
         justifyContent:'center',
         alignItems:'center',
-        position:'absolute',
-        top:'10%',
-        left:'80%'
+        
     }
 })

@@ -1,10 +1,11 @@
+import axios from 'axios'
 /**
  * 请求数据函数
  * @param {*} url 
  * @param {*} params 
  * @param {*} method 
  */
-export default function fetchAsync(url,params={},method='GET'){
+export default function axiosAsync(url,params={},method='GET'){
     return new Promise((resolve,reject)=>{
         method=method.toUpperCase()
         try {
@@ -17,23 +18,15 @@ export default function fetchAsync(url,params={},method='GET'){
                     })
                     url+=str.substring(0,str.length-1)
                 }
-                fetch(url).then(res=>{
-                    res.json().then(res=>{
-                        resolve(res)
-                    })
+                axios(url).then(res=>{
+                    resolve(res.data)
                 })
             }else{
-                fetch(url,{
+                axios(url,{
                     method,
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                      },
-                    body: JSON.stringify(params)
+                    data:JSON.stringify(params)
                 }).then(res=>{
-                    res.json().then(res=>{
-                        resolve(res)
-                    })
+                    resolve(res.data)
                 })
             }
         } catch (error) {

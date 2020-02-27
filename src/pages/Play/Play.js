@@ -127,6 +127,7 @@ class Play extends PureComponent{
         })
     }
     handleJump=()=>{
+        if(this.state.loading)return
         const {currentTime,totalTime}=this.state
         const nowTime=this.transFromTimeToSeconds(currentTime)
         const allTime=this.transFromTimeToSeconds(totalTime)
@@ -137,12 +138,12 @@ class Play extends PureComponent{
         })
     }
     changeVolume=(e)=>{
-        if(e.nativeEvent.locationX>55){
-            e.nativeEvent.locationX=60
+        if(e.nativeEvent.locationX>115){
+            e.nativeEvent.locationX=120
         }else if(e.nativeEvent.locationX<5){
             e.nativeEvent.locationX=0
         }
-        const newVolume= Math.round(e.nativeEvent.locationX)/60
+        const newVolume= Math.round(e.nativeEvent.locationX)/120
         this.setState({
             volume:newVolume
         })
@@ -198,7 +199,7 @@ class Play extends PureComponent{
             loading,buttonIndex,
             full,currentTime,totalTime,progress,
             bufferProgress,rate,repeat}=this.state
-        let otherStyle=StyleSheet.create({other:{left:60*volume-5}})
+        let otherStyle=StyleSheet.create({other:{left:120*volume-5}})
         const comments=this.props.comments
        return  (
             <ScrollView >
@@ -213,7 +214,7 @@ class Play extends PureComponent{
                     repeat={repeat}
                     fullscreen={full}
                     resizeMode="stretch"
-                    source={{uri:'https://you-ku.qingyu-zuida.com/20191223/2088_83931ef9/index.m3u8'}}
+                    source={{uri:'zx'}}
                     style={styles.videoStyle}
                     onLoadStart={()=>this.setState({loading:true})}
                     onLoad={(e)=>this.handleLoad(e)}
@@ -221,8 +222,8 @@ class Play extends PureComponent{
                     onSeek={(e)=>e.seekTime+4}
                     minLoadRetryCount={5}
                     />
-                <View  style={{backgroundColor:'black',width:'100%',flexDirection:'row'}}>
-                    <View style={{width:'70%',position:'relative',justifyContent:'center',alignItems:'center'}}>
+                <View  style={{height:30,backgroundColor:'black',width:'100%',flexDirection:'row'}}>
+                    <View style={{flex:3,position:'relative',justifyContent:'center',alignItems:'center'}}>
                         <ProgressBarAndroid 
                             styleAttr="Horizontal" 
                             indeterminate={false}
@@ -241,7 +242,7 @@ class Play extends PureComponent{
                             style={{width:'100%',position:'absolute'}}
                         />
                     </View>
-                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                    <View style={{flex:2,justifyContent:'center',alignItems:'center'}}>
                         <Text style={{color:'white'}}>{currentTime}/{totalTime}</Text>
                     </View>
                 </View>
@@ -252,7 +253,7 @@ class Play extends PureComponent{
                         }
                     </TouchableOpacity>
                     <TouchableOpacity  onPress={this.handleJump} style={styles.buttonStyle}>
-                        <Text style={styles.iconStyle}>—></Text>
+                        <Text style={styles.iconStyle}>>>>></Text>
                     </TouchableOpacity>
                     <View style={styles.rateStyle}>
                         <TouchableOpacity onPress={this.showC} style={{...styles.speedStyle}}>
@@ -292,10 +293,6 @@ class Play extends PureComponent{
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity onPress={this.playVideo} style={paused?styles.flyStyle:styles.noneStyle}><Text style={styles.iconStyleFly}>&#xe77e;</Text></TouchableOpacity>
-                <ProgressBarAndroid
-                    style={loading?styles.loadingStyle:styles.noneStyle}
-                    color="orange"
-                />
                 <Animated.View 
                     onTouchStart={(e)=>this.changeVolume(e)}
                     style={{...styles.volumeContainerStyle,opacity:this.state.fadeAnim}}>
@@ -310,13 +307,17 @@ class Play extends PureComponent{
                     ref={(f)=>this.volRef=f} 
                     style={[styles.volumeBtnStyle,otherStyle.other]}/>
                 </Animated.View >
+                <ProgressBarAndroid
+                    style={loading?styles.loadingStyle:styles.noneStyle}
+                    color="orange"
+                />
                 <Overlay
+                    overlayStyle={{padding:20}}
                     borderRadius={10}
                     isVisible={overLay}
                     windowBackgroundColor="rgba(0, 0, 0, .6)"
-                    width={ScreenWidth-140}
-                    height={370}
-                    overlayBackgroundColor="rgba(255, 165, 0, .8)"
+                    width={ScreenWidth-120}
+                    height={400}
                     onBackdropPress={() => this.setState({ overLay: false })}
                     >
                     <View style={{flex:1,justifyContent:'space-evenly'}}>
@@ -437,15 +438,14 @@ const styles=StyleSheet.create({
         position:'absolute',
         top:'50%',
         transform:[{translateY:-8}],
-        left:25
     },  
     volumeContainerStyle:{
-        width:60,
-        height:ScreenWidth*0.12,
+        width:120,
+        height:50,
         position:'absolute',
         transform:[{rotateZ:'-90deg'}],
-        top:ScreenWidth*0.715,
-        left:'71.25%'
+        top:305,
+        left:'63%'
     },
     relativeStyle:{
         position:'relative'
@@ -489,7 +489,7 @@ const styles=StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         position:'absolute',
-        top:ScreenWidth*0.6,
+        top:280,
         left:'80%',
         opacity:0.8
     },

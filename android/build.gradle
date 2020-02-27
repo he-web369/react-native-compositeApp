@@ -1,9 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-//使用自定义iconSets
-project.ext.vectoricons = [
-   iconFontNames: [ 'iconfont.ttf','MaterialIcons.ttf', 'EvilIcons.ttf'] // Name of the font files you want to copy
-]
 
 buildscript {
     ext {
