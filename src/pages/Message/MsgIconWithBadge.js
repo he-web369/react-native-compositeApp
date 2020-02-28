@@ -2,7 +2,17 @@ import React from 'react'
 import { View ,Text } from 'react-native'
 import {connect} from 'react-redux'
 
-function MsgIconWithBadge({badgeCount}){
+function MsgIconWithBadge({messages,user}){
+
+    let badgeCount=0
+    if(user.username){
+      badgeCount= messages.reduce((count,item)=>{
+          if(item.to===user._id&&!item.isRead){
+            count++
+          }
+          return count
+      },0)
+    }
     return (
         <View style={{ width: 24, height: 24, margin: 5 }}>
           <Text style={{
@@ -32,5 +42,5 @@ function MsgIconWithBadge({badgeCount}){
       )
 }
 export default connect(
-    state=>({badgeCount:state.badgeCount})
+    state=>({messages:state.messages,user:state.user})
 )(MsgIconWithBadge)

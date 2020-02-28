@@ -9,7 +9,7 @@ import MyBackButton from './useNavigationButton'
 const width= Math.round(Dimensions.get('window').width)
 export default class RNCameraApp extends PureComponent {
     state={
-      content:'',
+      data:'',
       position:new Animated.Value(-3)
     }
     chnage=()=>{
@@ -20,25 +20,22 @@ export default class RNCameraApp extends PureComponent {
               {
                 toValue:196,
                 duration:2000,
-                easing:Easing.linear()
+                easing:Easing.linear(),
+                useNativeDriver: true
               }
             ),Animated.timing(
               this.state.position,
               {
                 toValue:0,
                 duration:2000,
-                easing:Easing.linear()
+                easing:Easing.linear(),
+                useNativeDriver: true
               }
             )
           ])
       ).start()
     }
-    componentDidUpdate(){
-      this.chnage()
-    }
-    componentDidMount(){
-      this.chnage()
-    }
+    
     render() {
     return (
       <View >
@@ -60,6 +57,7 @@ export default class RNCameraApp extends PureComponent {
             buttonNegative: 'Cancel'
           }}
           onBarCodeRead={this.onBarCodeRead}
+          onCameraReady={this.chnage}
         >
           <View style={{height:150,backgroundColor:"rgba(0,0,0,.5)"}}/>
           <View style={{flexDirection:'row',height:200}}>
@@ -69,7 +67,7 @@ export default class RNCameraApp extends PureComponent {
             borderColor:'rgba(255,165,0,.5)'}}>
               <Animated.View style={{
                 transform:[{translateY:this.state.position}],
-                height:3,backgroundColor:'rgb(255,165,0)'}}></Animated.View>
+                height:2,backgroundColor:'rgb(255,165,0)'}}></Animated.View>
             </View>
             <View style={{width:(width-200)/2,backgroundColor:"rgba(0,0,0,.5)"}}/>
           </View>
@@ -81,7 +79,7 @@ export default class RNCameraApp extends PureComponent {
           borderRadius:5,margin:20,borderColor:'rgba(255,165,0,.7)',borderWidth:1
         }}>
           <Text style={{fontSize:15,flex:1
-            }}>扫码结果：{this.state.content}</Text>
+            }}>扫码结果：{this.state.data}</Text>
         </View>
         <MyBackButton/>
       </View>
@@ -89,7 +87,7 @@ export default class RNCameraApp extends PureComponent {
   }
   onBarCodeRead = (result) => {
     const {data} = result
-    this.setState=({content:data})
+    this.setState({data})
     }
 }
 const styles=StyleSheet.create({

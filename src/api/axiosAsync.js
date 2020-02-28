@@ -1,4 +1,5 @@
 import axios from 'axios'
+import qs from 'qs'
 /**
  * 请求数据函数
  * @param {*} url 
@@ -22,9 +23,12 @@ export default function axiosAsync(url,params={},method='GET'){
                     resolve(res.data)
                 })
             }else{
-                axios(url,{
+                params=qs.stringify(params)
+                axios({
+                    url,
                     method,
-                    data:JSON.stringify(params)
+                    dataType:'json',
+                    data:params
                 }).then(res=>{
                     resolve(res.data)
                 })

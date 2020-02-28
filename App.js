@@ -1,3 +1,6 @@
+/**
+ * 导航配置
+ */
 import React, { Component } from 'react'
 import { Text,StyleSheet,Dimensions } from 'react-native'
 import {Provider} from 'react-redux'
@@ -32,6 +35,7 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
+        {/* 底部导航 */}
         <NavigationContainer  >
           <Navigator initialRouteName='msg'
             tabBarOptions={{
@@ -109,6 +113,7 @@ function HomeStack(){
     </homeStack.Navigator>
   )
 }
+//头部导航
 const TopTab=createMaterialTopTabNavigator()
 function FunTab(){
   return (

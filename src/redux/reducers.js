@@ -1,16 +1,53 @@
 import {combineReducers} from 'redux'
 
-import {SEARCH_LOCATIONS,GET_LOCATION,HAS_VALUE,GET_COMMENTS,GET_MOVIES,RESET_MOVIES,CHANGE_RE} from './types'
+import {SEARCH_LOCATIONS,
+    GET_LOCATION,GET_COMMENTS,
+    GET_MOVIES,RESET_MOVIES,
+    GET_USER,
+    GET_MESSAGES,
+    CHANGE_RE,
+    UPDATE_USER,
+    UPDATE_MESSAGES,
+    DELETE_LOGIN,
+    MSGDELETE_LOGIN
+} from './types'
 
-function cameraData(state={},action){
+function messages(state=[],action){
     switch (action.type) {
-        case HAS_VALUE:
+        case GET_MESSAGES:
             return action.data
+            break
+        case UPDATE_MESSAGES:
+            return [...state,action.data]
+            break
+        case MSGDELETE_LOGIN:
+            return []
             break
         default:
             return state
+            break;
     }
 }
+
+const initUser={username:'',sign:'',friends:[]}
+function user(state=initUser,action){
+    switch (action.type) {
+        case GET_USER:
+            return action.data
+            break 
+        case UPDATE_USER:
+            return action.data
+            break 
+        case DELETE_LOGIN:
+            return {username:'',sign:'',friends:[]}
+            break 
+        default:
+            return state
+            break
+    }
+
+}
+
 function movies(state=[],action){
     switch (action.type) {
         case GET_MOVIES:
@@ -115,5 +152,5 @@ function locations(state=[],action){
      }
 }
 export default combineReducers({
-    cameraData,movieComments,movies,refresh,badgeCount,location,locations
+    movieComments,movies,refresh,badgeCount,location,locations,user,messages
 })
