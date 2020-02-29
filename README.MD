@@ -20,20 +20,20 @@
 ##  详情
 - 登录
 
-    <img src="https://github.com/he-web369/imageStorage/blob/master/login1.jpg" width="130" height="300">
-    <img src="https://github.com/he-web369/imageStorage/blob/master/login2.jpg" width="130" height="300">
-    <img src="https://github.com/he-web369/imageStorage/blob/master/login3.jpg" width="120" height="300">
-    <img src="https://github.com/he-web369/imageStorage/blob/master/login4.jpg" width="140" height="300">
-    <img src="https://github.com/he-web369/imageStorage/blob/master/login5.jpg" width="120" height="300">
-    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;进入个人界面现在asyncStorage获取用户信息，没有则跳转登录界面，登录及注册界面利用正则进行输入格式验证，利用react-native-image-picker进行照片选择设置头像，登录及注册经后台校验后跳转个人界面并存储用户信息到asyncStorage<p><hr/>
+    <img src="https://github.com/he-web369/imageStorage/blob/master/login1.jpg" width="150" height="300">
+    <img src="https://github.com/he-web369/imageStorage/blob/master/login2.jpg" width="150" height="300">
+    <img src="https://github.com/he-web369/imageStorage/blob/master/login3.jpg" width="150" height="300">
+    <img src="https://github.com/he-web369/imageStorage/blob/master/login4.jpg" width="150" height="300">
+    <img src="https://github.com/he-web369/imageStorage/blob/master/login5.jpg" width="150" height="300">
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;进入个人界面现在asyncStorage获取用户信息，没有则跳转登录界面，登录及注册界面利用正则进行输入格式验证，利用react-native-image-picker进行照片选择设置头像，登录及注册经后台校验后跳转个人界面并存储用户信息到asyncStorage<p>
 
 - 聊天
 
     <img src="https://github.com/he-web369/imageStorage/blob/master/chat3.jpg" width="150" height="300">
-    <img src="https://github.com/he-web369/imageStorage/blob/master/chat2.jpg" width="130" height="300">
-    <img src="https://github.com/he-web369/imageStorage/blob/master/chat1.jpg" width="120" height="300">
-    <img src="https://github.com/he-web369/imageStorage/blob/master/chat4.jpg" width="110" height="300">
-    <img src="https://github.com/he-web369/imageStorage/blob/master/chat5.jpg" width="120" height="300">
+    <img src="https://github.com/he-web369/imageStorage/blob/master/chat2.jpg" width="150" height="300">
+    <img src="https://github.com/he-web369/imageStorage/blob/master/chat1.jpg" width="150" height="300">
+    <img src="https://github.com/he-web369/imageStorage/blob/master/chat4.jpg" width="150" height="300">
+    <img src="https://github.com/he-web369/imageStorage/blob/master/chat5.jpg" width="150" height="300">
     <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;使用webSocket进行前后台通信，在后台设计好数据结构并保存消息数据到数据库，用户好友列表按名称排序展示，搜索好友，添加好友，充分利用redux来管理用户和消息数据，利用render props更新界面</p>
 
 - 首页
@@ -42,14 +42,14 @@
     <img src="https://github.com/he-web369/imageStorage/blob/master/home2.jpg" width="200" height="300">
     <img src="https://github.com/he-web369/imageStorage/blob/master/home3.jpg" width="200" height="300">
     <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首页头部使用topTabNavigator,底部使用tabNavigator,并配合stackNavigator实现页面导航，将所有导航集成在App.js中;汽车板块由于找不到数据资源，只好先做了个静态页面，按品牌名字、按系列及按车型分组；地图板块可显示当前定位，搜索周边三公里内目标，选择两个poi点并测算距离</p>
-<hr/>
+
 
 - 电影
 
     <img src="https://github.com/he-web369/imageStorage/blob/master/movie1.jpg" width="200" height="300">
     <img src="https://github.com/he-web369/imageStorage/blob/master/movie2.jpg" width="200" height="300">
     <img src="https://github.com/he-web369/imageStorage/blob/master/movie3.jpg" width="200" height="300">
-    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;利用豆瓣电影API获取电影列表数据，利用flatList展示数据，头部使用react-native-swiper组件实现循环轮播，头部可根据电影名字、演员名字、导演名字及评分实现搜索电影并展示，点击每个item跳转播放界面</p><hr/>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;利用豆瓣电影API获取电影列表数据，利用flatList展示数据，头部使用react-native-swiper组件实现循环轮播，头部可根据电影名字、演员名字、导演名字及评分实现搜索电影并展示，点击每个item跳转播放界面</p>
 
 -  视频播放
 
@@ -57,7 +57,7 @@
     <img src="https://github.com/he-web369/imageStorage/blob/master/play3.jpg" width="160" height="320">
     <img src="https://github.com/he-web369/imageStorage/blob/master/play4.jpg" width="160" height="320">
     <img src="https://github.com/he-web369/imageStorage/blob/master/play1.jpg" width="160" height="320">
-    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;利用react-native-video播放视频，自定义播放控件控制播放、快进、循环播放、音量、全屏，使用progressBar控制时间跳转，使用react-native-view-shot截屏，下部添加简介和评论列表</p><hr/>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;利用react-native-video播放视频，自定义播放控件控制播放、快进、循环播放、音量、全屏，使用progressBar控制时间跳转，使用react-native-view-shot截屏，下部添加简介和评论列表</p>
 
 - 社区和搜索
 
@@ -65,7 +65,7 @@
     <img src="https://github.com/he-web369/imageStorage/blob/master/community3.jpg" width="160" height="300">
     <img src="https://github.com/he-web369/imageStorage/blob/master/community1.jpg" width="160" height="300">
     <img src="https://github.com/he-web369/imageStorage/blob/master/search.jpg" width="160" height="300">
-    <P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实现社区板块静态界面，点击评论弹出二级评论列表，根据评论数进行分页，点击按钮跳转指定页面；搜索界面使用webView组件嵌入html页面</P><hr/>
+    <P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实现社区板块静态界面，点击评论弹出二级评论列表，根据评论数进行分页，点击按钮跳转指定页面；搜索界面使用webView组件嵌入html页面</P>
 
 - 二维码扫描和日历签到
 
