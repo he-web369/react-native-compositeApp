@@ -162,9 +162,10 @@ export default class Comment extends PureComponent{
                         <Comment key={index} comment={item}/>
                     ))}
                     {comment.res.length>5?<View style={{alignSelf:'flex-end',
-                        width:260,
+                        width:300,
                         flexDirection:'row',
                         justifyContent:'space-evenly'}}>
+                            <Text style={{textAlignVertical:'center'}}>第{(start/5)+1}页</Text>
                         <Button
                             onPress={this.handleBack}
                             buttonStyle={{backgroundColor:'rgba(255, 165, 0,0.7)'}}

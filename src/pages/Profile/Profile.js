@@ -78,14 +78,24 @@ import {_getData,_removeValue } from '../../utils/storage'
                     <AIcon name="setting" size={24}/>
                     <Text>设置</Text>
                 </TouchableOpacity>
+                {user.username?
                 <TouchableOpacity 
                 onPress={this.goLogin}
                 style={{margin:10,
                 padding:20,borderWidth:2,
                 borderRadius:30,
                 borderColor:'rgba(255,165,0,.7)'}}>
-                    <Text style={{textAlign:'center'}}>{user.username?'退   出':'登   录'}</Text>
+                    <Text style={{textAlign:'center'}}>退   出</Text>
+                </TouchableOpacity>:
+                <TouchableOpacity 
+                onPress={()=>this.props.navigation.navigate('login')}
+                style={{margin:10,
+                padding:20,borderWidth:2,
+                borderRadius:30,
+                borderColor:'rgba(255,165,0,.7)'}}>
+                    <Text style={{textAlign:'center'}}>登   录</Text>
                 </TouchableOpacity>
+                }
             </View>
         )
     }

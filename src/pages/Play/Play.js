@@ -214,7 +214,7 @@ class Play extends PureComponent{
                     repeat={repeat}
                     fullscreen={full}
                     resizeMode="stretch"
-                    source={{uri:'zx'}}
+                    source={{uri:'xx'}}
                     style={styles.videoStyle}
                     onLoadStart={()=>this.setState({loading:true})}
                     onLoad={(e)=>this.handleLoad(e)}
@@ -253,7 +253,7 @@ class Play extends PureComponent{
                         }
                     </TouchableOpacity>
                     <TouchableOpacity  onPress={this.handleJump} style={styles.buttonStyle}>
-                        <Text style={styles.iconStyle}>>>>></Text>
+                        <Text style={styles.iconStyle}>>></Text>
                     </TouchableOpacity>
                     <View style={styles.rateStyle}>
                         <TouchableOpacity onPress={this.showC} style={{...styles.speedStyle}}>

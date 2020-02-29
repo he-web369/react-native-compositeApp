@@ -43,6 +43,7 @@ import {_setData} from '../../utils/storage'
                     getMsgs(result.data._id).then(re=>{
                         this.props.getMessages(re.data)
                         this.props.navigation.navigate('profile')
+                        this.setState({username:'',password:'',validateCode:''})
                     })
                 })
             }else{

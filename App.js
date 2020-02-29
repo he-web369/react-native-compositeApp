@@ -37,7 +37,7 @@ export default class App extends Component {
       <Provider store={store}>
         {/* 底部导航 */}
         <NavigationContainer  >
-          <Navigator initialRouteName='msg'
+          <Navigator initialRouteName='login'
             tabBarOptions={{
                 style:{height:50},
                 activeBackgroundColor:'orange',

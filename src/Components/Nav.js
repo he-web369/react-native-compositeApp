@@ -64,6 +64,7 @@ class Nav extends Component{
                     }
                 })
             }
+            console.log(data)
             this.props.resetMov(data)
             this.props.toggleRe(false)
             return 
