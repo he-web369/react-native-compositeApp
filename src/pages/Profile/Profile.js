@@ -1,36 +1,26 @@
 import React, { Component } from 'react'
-import { Text, View ,Alert} from 'react-native'
+import { Text, View ,Alert,TouchableOpacity} from 'react-native'
 import { Avatar } from 'react-native-elements'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import AIcon from 'react-native-vector-icons/AntDesign'
 import {connect} from 'react-redux'
 
-import {getUser,deleteLogin,msgLogOut} from '../../redux/actions'
+import {deleteLogin,msgLogOut} from '../../redux/actions'
 import {_getData,_removeValue } from '../../utils/storage'
 
  class Profile extends Component{
 
 
     componentDidMount(){
-        _getData('username')
-       .then(res=>{
-         if(!res){
-              Alert.alert(
-                  "提示信息",
-                  "请先登录"
-              )
-             this.props.navigation.navigate('login')
-         }else{
-              this.props.getUser(res)
-         }
+        _getData('username').then(res=>{
+            if(!res){
+                Alert.alert(
+                    "提示信息",
+                    "请先登录"
+                )
+                this.props.navigation.navigate('login')
+            }
        })
     }
-    componentDidUpdate(){
-        if(!this.props.user.username){
-            this.props.navigation.navigate('login')
-        }
-    }
-    
     goLogin=()=>{
         Alert.alert(
             "提示信息",
@@ -56,7 +46,7 @@ import {_getData,_removeValue } from '../../utils/storage'
                 borderRadius:30,
                 borderColor:'rgba(255,165,0,.7)'
                 }}>
-                    <Avatar size="large" rounded/>
+                    <Avatar size="large" rounded source={{uri:user.avatarUri}}/>
                     <View style={{padding:10}}>
                         <Text style={{fontSize:16}}>昵称：{user.nickName}</Text>
                         <Text style={{color:'rgba(0,0,0,0.5)'}}>用户名：{user.username}</Text>
@@ -70,37 +60,27 @@ import {_getData,_removeValue } from '../../utils/storage'
                     <Text>sign：{user.sign}</Text>
                 </View>
                 <TouchableOpacity 
-                onPress={()=>navigation.navigate('logup')}
-                style={{flexDirection:'row',margin:10,
-                padding:20,borderWidth:2,
-                borderRadius:30,
-                borderColor:'rgba(255,165,0,.7)'}}>
-                    <AIcon name="setting" size={24}/>
-                    <Text>设置</Text>
+                    onPress={()=>navigation.navigate('logup')}
+                    style={{flexDirection:'row',margin:10,
+                    padding:20,borderWidth:2,
+                    borderRadius:30,
+                    borderColor:'rgba(255,165,0,.7)'}}>
+                        <AIcon name="setting" size={24}/>
+                        <Text>设置</Text>
                 </TouchableOpacity>
-                {user.username?
                 <TouchableOpacity 
-                onPress={this.goLogin}
-                style={{margin:10,
-                padding:20,borderWidth:2,
-                borderRadius:30,
-                borderColor:'rgba(255,165,0,.7)'}}>
-                    <Text style={{textAlign:'center'}}>退   出</Text>
-                </TouchableOpacity>:
-                <TouchableOpacity 
-                onPress={()=>this.props.navigation.navigate('login')}
-                style={{margin:10,
-                padding:20,borderWidth:2,
-                borderRadius:30,
-                borderColor:'rgba(255,165,0,.7)'}}>
-                    <Text style={{textAlign:'center'}}>登   录</Text>
+                    onPress={this.goLogin}
+                    style={{margin:10,
+                    padding:20,borderWidth:2,
+                    borderRadius:30,
+                    borderColor:'rgba(255,165,0,.7)'}}>
+                        <Text style={{textAlign:'center'}}>退   出</Text>
                 </TouchableOpacity>
-                }
             </View>
         )
     }
 }
 export default connect(
     state=>({user:state.user}),
-    {getUser,deleteLogin,msgLogOut}
+    {deleteLogin,msgLogOut}
 )(Profile)

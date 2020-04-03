@@ -2,7 +2,7 @@
  * 导航配置
  */
 import React, { Component } from 'react'
-import { Text,StyleSheet,Dimensions } from 'react-native'
+import { Text,StyleSheet } from 'react-native'
 import {Provider} from 'react-redux'
 import { NavigationContainer } from '@react-navigation/native'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
@@ -29,7 +29,6 @@ import MsgIconWithBadge from './src/pages/Message/MsgIconWithBadge'
 
 const Tab=createBottomTabNavigator()
 const {Navigator,Screen}=Tab
-const ScreenHeight=Math.round(Dimensions.get('window').height)
 export default class App extends Component {
   
   render() {
@@ -62,7 +61,7 @@ export default class App extends Component {
             component={MsgStack}  options={{title:'信息',
             tabBarIcon:()=><MsgIconWithBadge/>}}></Screen>
             <Screen name='profile' 
-            component={ProfileStack}  options={{title:'个人',
+            component={Profile}  options={{title:'个人',
             tabBarIcon:()=>(<Text style={style.iconStyle}>&#xe60a;</Text>)
             }}></Screen>
             <Screen name='rncamera' options={{
@@ -75,23 +74,13 @@ export default class App extends Component {
             } component={Sign}/>
             <Screen name='chat' options={{tabBarVisible:false,tabBarButton:()=>null}
             } component={Chat}/>
-            <Screen name='login' options={{tabBarVisible:false,tabBarButton:()=>null}
-            } component={Login}/>
+            <Screen name='login' options={{tabBarVisible:false,tabBarButton:()=>null}} component={Login}/>
+            <Screen name='logup' options={{tabBarVisible:false,tabBarButton:()=>null}} component={LogUp}/>
           </Navigator>
         </NavigationContainer>
       </Provider>
     )
   }
-}
-const profileStack=createStackNavigator()
-function ProfileStack(){
-  return (
-    <profileStack.Navigator headerMode="none"
-    initialRouteName="detailProfile">
-      <profileStack.Screen name="logup" component={LogUp}/>
-      <profileStack.Screen name="detailProfile" component={Profile}/>
-    </profileStack.Navigator>
-  )
 }
 const msgStack=createStackNavigator()
 function MsgStack(){

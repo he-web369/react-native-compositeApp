@@ -3,7 +3,7 @@
  */
 import  AsyncStorage from '@react-native-community/async-storage'
 
- export  async function _setData(key,value){
+ export  const _setData=async (key,value)=>{
         try {
             await AsyncStorage.setItem(key,value)
         } catch (error) {
@@ -12,7 +12,7 @@ import  AsyncStorage from '@react-native-community/async-storage'
  }
  export const _getData = async (key) => {
     try {
-      return  await AsyncStorage.getItem('key')
+      return  await AsyncStorage.getItem(key)
     } catch(e) {
         console.log(e)
     }

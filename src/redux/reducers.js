@@ -29,7 +29,7 @@ function messages(state=[],action){
     }
 }
 
-const initUser={username:'',sign:'',friends:[]}
+const initUser={username:'',sign:'',friends:[],avatarUri:null}
 function user(state=initUser,action){
     switch (action.type) {
         case GET_USER:

@@ -72,21 +72,21 @@ const ScreenWidth=Math.round(Dimensions.get('window').width)
                         wordArr.map((item,index)=>(
                             <View key={index}>
                                 <Text style={{marginVertical:10,paddingHorizontal:20,backgroundColor:'rgba(255,165,0,.7)',fontSize:12}}>{item}</Text>
-                                    {user.username?user.friends.filter(f=>f.username.substring(0,1).toUpperCase()===item).map((ff,index)=>(
+                                    {user.friends?.filter(f=>f.username.substring(0,1).toUpperCase()===item).map((ff,index)=>(
                                     <TouchableOpacity key={index}
                                     onPress={()=>this.jumpAndRead(user,ff)}
                                     style={{flexDirection:'row',padding:10,paddingLeft:20,borderBottomWidth:1,borderBottomColor:"rgba(0,0,0,.1)"}}>
                                         <Avatar size="small" rounded  onPress={()=>this.setState({showBox:true,searchUser:ff})} />
                                         <Text style={{fontSize:16,marginLeft:10}}>{ff.username}</Text>
                                     </TouchableOpacity>
-                                    )):null}
+                                    ))}
                             </View>
                             ))
                     }
                     <Divider />
                     <View  style={{flexDirection:'row',justifyContent:'center',padding:10}}>
                         <FIcon name="list" size={30}/>
-                        <Text style={{marginLeft:10,textAlignVertical:'center'}}>共{user.friends.length}位联系人</Text>
+                        <Text style={{marginLeft:10,textAlignVertical:'center'}}>共{user.friends?.length||0}位联系人</Text>
                     </View>
                 <Overlay
                     overlayStyle={{padding:20}}

@@ -20,22 +20,22 @@ const { Marker, Cluster } = Overlay
             currentTitle:'',
             point1:{longitude:0,latitude:0,name:''},
             point2:{longitude:1,latitude:0,name:''},
-            distance:0
+            distance:0,
         }
     }
     componentDidMount(){
         Geolocation.getCurrentPosition().then(res=>{
             this.setState({
-                longitude:res.longitude-0.0032,
-                latitude:res.latitude-0.0052,
+                longitude:res.longitude,
+                latitude:res.latitude,
                 currentTitle:res.address
             })
-            this.props.getLocation({longitude:res.longitude-0.0032,latitude:res.latitude-0.0052})
+            this.props.getLocation({longitude:res.longitude,latitude:res.latitude})
         }).catch(err=>{console.log(err)})
     }
     handleE=(e)=>{
         const {point1,point2}=this.state
-        if(point1.longitude===0&&point2.longitude===1){
+        if(point1.longitude===0){
             this.setState({point1:e})
         }else if(point1.longitude===e.longitude){
             this.setState({point1:{longitude:0,latitude:0,name:''},distance:0})
@@ -68,12 +68,11 @@ const { Marker, Cluster } = Overlay
                      showsUserLocation
                      locationData={{longitude,latitude}}
                 >
-
                     <Marker  location={{longitude:point1.longitude,latitude:point1.latitude}} />
                     <Marker  location={{longitude:point2.longitude,latitude:point2.latitude}} />
                     <Cluster>
                         {locations.length>0?locations.map((item,index)=>(
-                            <Marker  key={index} location={{longitude:item.location[0]*1-0.0032,latitude:item.location[1]*1-0.0052}} />
+                            <Marker  key={index} location={{longitude:item.location[0]*1,latitude:item.location[1]*1}} />
                         )):null}
                     </Cluster>
                 </MapView>

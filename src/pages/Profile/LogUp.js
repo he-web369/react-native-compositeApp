@@ -10,7 +10,7 @@ import {_setData} from '../../utils/storage'
 
  class LogUp extends Component{
     state={
-        avatarUri:'',
+        avatarUri:null,
         username:'',
         password:'',
         sign:'',
@@ -28,8 +28,22 @@ import {_setData} from '../../utils/storage'
             cancelButtonTitle:"取消",
             takePhotoButtonTitle:"相机",
             chooseFromLibraryButtonTitle:"本地文件库",
-        },res=>{
-            console.log(res.data)
+            cameraType: 'back',
+            mediaType: 'photo',
+            allowsEditing: false, 
+            noData: false,
+            storageOptions: {
+                skipBackup: true,
+                waitUntilSaved:true
+            }
+        },(response)=>{
+            if (response.didCancel) {
+                console.info('User cancelled photo picker')
+              } else if (response.error) {
+                console.info('ImagePicker Error: ', response.error)
+              } else {
+                this.setState({avatarUri:response.uri})
+            }
         })
     }
     checkUserName=async ()=>{
@@ -74,7 +88,7 @@ import {_setData} from '../../utils/storage'
         }
     }
     render(){
-        const {username,password,sign,nickName}=this.state
+        const {username,password,sign,nickName,avatarUri}=this.state
         const {user}=this.props
        return  (
             <View>
@@ -134,7 +148,7 @@ import {_setData} from '../../utils/storage'
                 borderColor:'rgba(255,165,0,.7)'
                 }}>
                     <Text style={{textAlignVertical:'center'}}>头像：</Text>
-                    <Avatar size="medium" rounded />
+                    <Avatar size="medium" rounded source={{uri:avatarUri}}/>
                     <View style={{flex:1,alignItems:'flex-end'}}>
                         <Button onPress={this.choiceAvatar} title="选择头像" titleStyle={{fontSize:14,color:'rgba(0,0,0,.7)'}} 
                         buttonStyle={{borderRadius:20,backgroundColor:'rgba(255,165,0,.7)'}}/>
